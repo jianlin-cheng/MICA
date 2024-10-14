@@ -1,2 +1,2 @@
 # CryoTracer
-Deep Swin model for building atomic protein structures from cryo-EM density maps
+Deep Swin model for building atomic protein backbone structures from cryo-EM density maps
