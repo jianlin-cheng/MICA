@@ -224,7 +224,7 @@ rm Results.tar.gz
 </details>
 
 <details>
-<summary><h2>🔥 Training MICA (Optional)</h2></summary>
+<summary><h2>🔥 Training MICA </h2></summary>
 
 This section provides comprehensive instructions for training MICA from scratch.
 
@@ -241,7 +241,9 @@ Training_Dataset/
 ### 🚀 Training Process
 
 ### 1. Download Training Dataset
-Download Training Dataset from previous step (skip this step if you have already done)
+Download Training Dataset from previous step (skip this step if you are going to use your own data)
+
+If using your own data, please compile the data in the same format as in *Initial Training Dataset Structure*
 
 ### 2. Create Full Training Data with Grids
 ```bash
