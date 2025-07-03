@@ -23,21 +23,21 @@ conda env create -f environment.yml
 conda activate MICA
 ```
 
-### 3. Download MICA model
+### 3. Download MICA Model
 ```
 curl https://zenodo.org/api/records/15756654/files/trained_models.tar.gz?download=1 --output trained_models.tar.gz
 tar -xzvf trained_models.tar.gz
 rm trained_models.tar.gz
 ```
 
-### 4. Download Sample Data for inference
+### 4. Download Sample Data for Inference
 ```
 curl https://zenodo.org/api/records/15756654/files/input.tar.gz?download=1 --output input.tar.gz
 tar -xzvf input.tar.gz
 rm input.tar.gz
 ```
 
-### 5. Inference on sample data 
+### 5. Inference on Sample Data 
 Run inference on sample data to make sure the installation has been done correctly.
 ```
 python run.py -m input/15635/emd_15635.map -f input/15635/8at6.fasta -i input/15635 --run_pulchra --pulchra_path=modules/pulchra304/src/pulchra --resolution=3.7
@@ -45,7 +45,7 @@ python run.py -m input/15635/emd_15635.map -f input/15635/8at6.fasta -i input/15
 
 ## 📂 Running on New Dataset
 
-### 1: Install and configure Phenix (Skip this step if you already have Phenix on your machine)
+### 🔧 Step 1: Install and Configure PHENIX (Skip this step if you already have Phenix on your machine)
 
 1. Visit the [PHENIX download website](https://phenix-online.org/download)
 2. Click on **Request a password** using your institutional email
@@ -54,15 +54,15 @@ python run.py -m input/15635/emd_15635.map -f input/15635/8at6.fasta -i input/15
 5. Set up Phenix
 6. Verify the Phenix installation and grab path to phenix_env.sh
 
-**For complete instructions on installing and setting up Phenix visit [Phenix website](https://phenix-online.org/documentation/install-setup-run.html)
+**For complete instructions on installing and setting up Phenix visit [PHENIX website](https://phenix-online.org/documentation/install-setup-run.html)**
 
-### 2. Inference on New Dataset
-#### Prerequisites
+### 🔮 Step 2: Inference on New Dataset
+#### 📋 Prerequisites
 - FASTA sequence file (e.g., `8at6.fasta`)
 - Cryo-EM density map (e.g., `emd_15635.map`)
 - PHENIX installed
 
-#### Directory Structure
+#### 📁 Directory Structure
 Your directory structure should be something like this; initially containing 8at6.fasta and emd_15635.map:
 ```
 MICA/
@@ -88,10 +88,10 @@ MICA/
 
 Run the following commands sequentially inside *MICA location*.
 
-#### 2.1 Generate AlphaFold3 JSON Files
+#### 2.1 Generate AlphaFold3 JSON files
 **Required Format:**
 ```bash
-python utils/fasta_to_AF3_json.py -f <path/to/fasta/file> -n <protein_name>
+python utils/fasta_to_AF3_json.py -f <path/to/fasta/file> -n <protein_name or Map ID>
 ```
 
 **Example:**
@@ -116,7 +116,7 @@ python utils/process_AF3_results.py -f <path/to/fasta/file> -a <path/to/AF3_resu
 python utils/process_AF3_results.py -f input/15635/8at6.fasta -a input/15635/AF3_results
 ```
 
-#### 2.3 Get Map Parameters if Cryo-EM map is avaiable in EMDB website (Optional)
+#### 2.3 Get map parameters if Cryo-EM map is available in EMDB website (Optional)
 
 **Required Format:**
 ```bash
@@ -151,7 +151,7 @@ python utils/dock_in_map.py \
     --phenix_act ../phenix/phenix-1.20.1-4487/phenix_env.sh
 ```
 
-#### 2.4 Run Data preprocessing, deep learning prediction and atomic model building
+#### 2.5 Run data preprocessing, deep learning prediction and atomic model building
 **Required Format:**
 ```bash
 python run.py \
@@ -178,6 +178,123 @@ python run.py \
     --resolution=3.7
 ```
 
-### 3. Results
+#### 2.6 Results
 Final atomic model will be saved in: `output/15635_8at6_MICA_all_atom_model.pdb`
+
+## 📥 Downloading Datasets and Results (Optional)
+
+This section provides instructions for downloading the training dataset, test dataset, and pre-computed results for the MICA project.
+
+### 📊 Available Downloads
+
+| Dataset | Size | Description | Use Case |
+|---------|------|-------------|----------|
+| **Training Dataset** | ~48 GB | Curated cryo-EM maps with corresponding FASTA sequences, PDB files, and AlphaFold3 structures for model training | Model development and training |
+| **Test Dataset** | ~20 GB | Evaluation datasets containing cryo-EM maps and associated FASTA sequences, ground truth structures and AlphaFold3 structures | Model validation and benchmarking |
+| **Pre-computed Results** | ~150 MB | MICA predictions on test results | Comparison and analysis |
+
+### 1. Downloading Training Dataset (OptionaL)
+```
+curl https://zenodo.org/api/records/15756654/files/Training_Dataset.tar.gz?download=1 --output Training_Dataset.tar.gz
+tar -xzvf Training_Dataset.tar.gz
+rm Training_Dataset.tar.gz
+```
+
+### 2. Downloading Test Dataset (OptionaL)
+```
+curl https://zenodo.org/api/records/15756654/files/Test_Dataset.tar.gz?download=1 --output Test_Dataset.tar.gz
+tar -xzvf Test_Dataset.tar.gz
+rm Test_Dataset.tar.gz
+```
+
+### 3. Downloading Pre-computed Results for MICA (OptionaL)
+```
+curl https://zenodo.org/api/records/15756654/files/Results.tar.gz?download=1 --output Results.tar.gz
+tar -xzvf Results.tar.gz
+rm Results.tar.gz
+```
+
+## 🔥 Training MICA (Optional)
+
+This section provides comprehensive instructions for training MICA from scratch.
+
+### 📁 Initial Training Dataset Structure
+```
+Training_Dataset/
+└── Raw_Data/
+    └── 0071/                    # Dataset entry 0071
+        ├── 6qve.fasta          # Protein FASTA file
+        ├── 6qve.pdb            # Ground Truth PDB structure
+        ├── 0071_af3_docked.pdb # AF3 docked structure
+        └── emd_0071.map        # Cryo-EM density map
+```
+### 🚀 Training Process
+
+### 1. Download Training Dataset
+Download Training Dataset from previous step (skip this step if you have already done)
+
+### 2. Create Full Training Data with Grids
+```bash
+sh create_training_data.sh
+```
+
+After running this script, your training dataset directory structure should look like:
+```
+Training_Dataset/
+├── Grids/
+│   ├── AA_masks/                # Amino acid mask files
+│   ├── ALA_encodings/           # Alanine residue encodings
+│   ├── ARG_encodings/           # Arginine residue encodings
+│   ├── ASN_encodings/           # Asparagine residue encodings
+│   ├── ASP_encodings/           # Aspartic acid residue encodings
+│   ├── BB_masks/                # Backbone mask files
+│   ├── C_encodings/             # Carbon atom encodings
+│   ├── CA_encodings/            # Alpha carbon encodings
+│   ├── CA_masks/                # Alpha carbon mask files
+│   ├── CYS_encodings/           # Cysteine residue encodings
+│   ├── GLN_encodings/           # Glutamine residue encodings
+│   ├── GLU_encodings/           # Glutamic acid residue encodings
+│   ├── GLY_encodings/           # Glycine residue encodings
+│   ├── HIS_encodings/           # Histidine residue encodings
+│   ├── ILE_encodings/           # Isoleucine residue encodings
+│   ├── LEU_encodings/           # Leucine residue encodings
+│   ├── LYS_encodings/           # Lysine residue encodings
+│   ├── MET_encodings/           # Methionine residue encodings
+│   ├── N_encodings/             # Nitrogen atom encodings
+│   ├── normalized_maps/         # Normalized density maps
+│   ├── O_encodings/             # Oxygen atom encodings
+│   ├── PHE_encodings/           # Phenylalanine residue encodings
+│   ├── PRO_encodings/           # Proline residue encodings
+│   ├── SER_encodings/           # Serine residue encodings
+│   ├── THR_encodings/           # Threonine residue encodings
+│   ├── TRP_encodings/           # Tryptophan residue encodings
+│   ├── TYR_encodings/           # Tyrosine residue encodings
+│   └── VAL_encodings/           # Valine residue encodings
+├── Processed_Data/              # Intermediate processed files
+└── Raw_Data/
+    └── 0071/                    # Dataset entry 0071
+        ├── 6qve.fasta          # Protein sequence file
+        ├── 6qve.pdb            # Experimental structure
+        ├── 0071_af3_docked.pdb # AF3 docked structure
+        └── emd_0071.map        # Cryo-EM density map
+```
+
+### 3. Run Training
+```bash
+python train.py
+```
+
+### ⚙️ Parameter Tuning
+
+Parameters tuning can be found in `training_config.py` or passed directly to `train.py`
+
+**Required Format:**
+```bash
+python train.py --batch_size <size> --learning_rate <rate> --epochs <num>
+```
+
+**Example:**
+```bash
+python train.py --batch_size 4 --learning_rate 0.0001 --epochs 100
+```
 
