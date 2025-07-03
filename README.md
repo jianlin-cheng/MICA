@@ -241,7 +241,7 @@ Training_Dataset/
 ### 🚀 Training Process
 
 ### 1. Download Training Dataset
-Download Training Dataset from previous step (skip this step if you are going to use your own data)
+Download Training Dataset from previous step (skip this step if you have already downloaded or are going to use your own data)
 
 If using your own data, please compile the data in the same format as in *Initial Training Dataset Structure*
 
