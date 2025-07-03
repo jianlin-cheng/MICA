@@ -298,3 +298,67 @@ python train.py --batch_size <size> --learning_rate <rate> --epochs <num>
 python train.py --batch_size 4 --learning_rate 0.0001 --epochs 100
 ```
 
+## 📄 Rights and Permissions
+Open Access \
+This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
+
+## 🔐 Data Usage Rights
+
+The datasets provided with MICA are derived from publicly available sources:
+
+- **Cryo-EM density maps**: Retrieved from the Electron Microscopy Data Bank (EMDB)
+- **Protein structures**: Retrieved from the Protein Data Bank (PDB)
+- **AlphaFold3 predictions**: Generated using the AlphaFold Server
+
+## 📚 How to Cite This Work
+
+### Primary Citation
+
+If you use MICA in your research, please cite our paper:
+
+```bibtex
+@article{mica2025,
+  title={Multimodal deep learning integration of cryo-EM and AlphaFold3 for high-accuracy protein structure determination},
+  author={Gyawali, Rajan and
+                  Dhakal, Ashwin and
+                  Cheng, Jianlin},,
+  journal={[Journal Name]},
+  year={2025},
+  volume={[Volume]},
+  number={[Issue]},
+  pages={[Pages]},
+  doi={[DOI]},
+  url={https://github.com/jianlin-cheng/MICA}
+}
+```
+
+### Dataset Citation
+
+If you use our curated datasets, please also cite:
+
+```bibtex
+@dataset{gyawali_2025_15756654,
+  author       = {Gyawali, Rajan and
+                  Dhakal, Ashwin and
+                  Cheng, Jianlin},
+  title        = {Multimodal deep learning integration of cryo-EM
+                   and AlphaFold3 for high-accuracy protein structure
+                   determination
+                  },
+  year         = 2025,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.15756654},
+  url          ={https://zenodo.org/records/15756654},
+}
+```
+
+## 📧 Contact
+
+**Jianlin (Jack) Cheng, PhD, AAAS Fellow**  
+Curators' Distinguished Professor  
+William and Nancy Thompson Distinguished Professor  
+Department of Electrical Engineering and Computer Science  
+University of Missouri  
+Columbia, MO 65211, USA  
+ **Email**: [chengji@missouri.edu](mailto:chengji@missouri.edu)
+
