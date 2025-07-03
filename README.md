@@ -25,14 +25,14 @@ conda activate MICA
 
 ### 3. Download MICA Model
 ```
-curl https://zenodo.org/api/records/15756654/files/trained_models.tar.gz?download=1 --output trained_models.tar.gz
+curl https://zenodo.org/records/15756654/files/trained_models.tar.gz?download=1 --output trained_models.tar.gz
 tar -xzvf trained_models.tar.gz
 rm trained_models.tar.gz
 ```
 
 ### 4. Download Sample Data for Inference
 ```
-curl https://zenodo.org/api/records/15756654/files/input.tar.gz?download=1 --output input.tar.gz
+curl https://zenodo.org/records/15756654/files/input.tar.gz?download=1 --output input.tar.gz
 tar -xzvf input.tar.gz
 rm input.tar.gz
 ```
@@ -195,21 +195,21 @@ This section provides instructions for downloading the training dataset, test da
 
 ### 1. Downloading Training Dataset (OptionaL)
 ```
-curl https://zenodo.org/api/records/15756654/files/Training_Dataset.tar.gz?download=1 --output Training_Dataset.tar.gz
+curl https://zenodo.org/records/15756654/files/Training_Dataset.tar.gz?download=1 --output Training_Dataset.tar.gz
 tar -xzvf Training_Dataset.tar.gz
 rm Training_Dataset.tar.gz
 ```
 
 ### 2. Downloading Test Dataset (OptionaL)
 ```
-curl https://zenodo.org/api/records/15756654/files/Test_Dataset.tar.gz?download=1 --output Test_Dataset.tar.gz
+curl https://zenodo.org/records/15756654/files/Test_Dataset.tar.gz?download=1 --output Test_Dataset.tar.gz
 tar -xzvf Test_Dataset.tar.gz
 rm Test_Dataset.tar.gz
 ```
 
 ### 3. Downloading Pre-computed Results for MICA (OptionaL)
 ```
-curl https://zenodo.org/api/records/15756654/files/Results.tar.gz?download=1 --output Results.tar.gz
+curl https://zenodo.org/records/15756654/files/Results.tar.gz?download=1 --output Results.tar.gz
 tar -xzvf Results.tar.gz
 rm Results.tar.gz
 ```
