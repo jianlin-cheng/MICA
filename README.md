@@ -1,2 +1,1 @@
-# MICA
-Deep Swin model for building atomic protein backbone structures from cryo-EM density maps
+# Multimodal deep learning integration of cryo-EM and AlphaFold3 for high-accuracy protein structure determination 
