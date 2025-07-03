@@ -2,12 +2,13 @@
 
 Cryo-electron microscopy (cryo-EM) is a key technology for determining the structures of proteins, particularly large protein complexes. However, automatically building high-accuracy protein structures from cryo-EM density maps remains a crucial challenge. In this work, we introduce MICA, a fully automatic and multimodal deep learning approach combining cryo-EM density maps with AlphaFold3-predicted structures at both input and output levels to improve cryo-EM protein structure modeling. It first uses a multi-task encoder-decoder architecture with a feature pyramid network to predict backbone atoms, Cα atoms and amino acid types from both cryo-EM maps and AlphaFold3-predicted structures, which are used to build an initial backbone model. This model is further refined using AlphaFold3-predicted structures and density maps to build final atomic structures. MICA significantly outperforms other state-of-the-art deep learning methods in terms of both modeling accuracy and completeness and is robust to protein size and map resolution. Additionally, it builds high-accuracy structural models with an average template-based modeling score (TM-score) of 0.93 from recently released high-resolution cryo-EM density maps, showing it can be used for real-world, automated, accurate protein structure determination.
 
-## Overview
+## 🔍 Overview
 Figure below demonstrates the overview of atomic modeling process used by MICA.
 
 ![Alt text](<assets/General_Overview.jpg>)
 
-## 🚀 Quick Start
+<details>
+<summary><h2>🚀 Quick Start</h2></summary>
 
 ### 1. Clone the Repository
 ```
@@ -43,7 +44,10 @@ Run inference on sample data to make sure the installation has been done correct
 python run.py -m input/15635/emd_15635.map -f input/15635/8at6.fasta -i input/15635 --run_pulchra --pulchra_path=modules/pulchra304/src/pulchra --resolution=3.7
 ```
 
-## 📂 Running on New Dataset
+</details>
+
+<details>
+<summary><h2>📂 Running on New Dataset</h2></summary>
 
 ### 🔧 Step 1: Install and Configure PHENIX (Skip this step if you already have Phenix on your machine)
 
@@ -181,7 +185,10 @@ python run.py \
 #### 2.6 Results
 Final atomic model will be saved in: `output/15635_8at6_MICA_all_atom_model.pdb`
 
-## 📥 Downloading Datasets and Results (Optional)
+</details>
+
+<details>
+<summary><h2>📥 Downloading Datasets and Results (Optional)</h2></summary>
 
 This section provides instructions for downloading the training dataset, test dataset, and pre-computed results for the MICA project.
 
@@ -193,28 +200,31 @@ This section provides instructions for downloading the training dataset, test da
 | **Test Dataset** | ~20 GB | Evaluation datasets containing cryo-EM maps and associated FASTA sequences, ground truth structures and AlphaFold3 structures | Model validation and benchmarking |
 | **Pre-computed Results** | ~150 MB | MICA predictions on test results | Comparison and analysis |
 
-### 1. Downloading Training Dataset (OptionaL)
+### 1. Downloading Training Dataset (Optional)
 ```
 curl https://zenodo.org/records/15756654/files/Training_Dataset.tar.gz?download=1 --output Training_Dataset.tar.gz
 tar -xzvf Training_Dataset.tar.gz
 rm Training_Dataset.tar.gz
 ```
 
-### 2. Downloading Test Dataset (OptionaL)
+### 2. Downloading Test Dataset (Optional)
 ```
 curl https://zenodo.org/records/15756654/files/Test_Dataset.tar.gz?download=1 --output Test_Dataset.tar.gz
 tar -xzvf Test_Dataset.tar.gz
 rm Test_Dataset.tar.gz
 ```
 
-### 3. Downloading Pre-computed Results for MICA (OptionaL)
+### 3. Downloading Pre-computed Results for MICA (Optional)
 ```
 curl https://zenodo.org/records/15756654/files/Results.tar.gz?download=1 --output Results.tar.gz
 tar -xzvf Results.tar.gz
 rm Results.tar.gz
 ```
 
-## 🔥 Training MICA (Optional)
+</details>
+
+<details>
+<summary><h2>🔥 Training MICA (Optional)</h2></summary>
 
 This section provides comprehensive instructions for training MICA from scratch.
 
@@ -298,11 +308,15 @@ python train.py --batch_size <size> --learning_rate <rate> --epochs <num>
 python train.py --batch_size 4 --learning_rate 0.0001 --epochs 100
 ```
 
-## 📄 Rights and Permissions
-Open Access \
-This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
+</details>
 
-## 🔐 Data Usage Rights
+<details>
+<summary><h2>📄 Rights and Permissions</h2></summary>
+
+Open Access \
+This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article's Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
+
+### 🔐 Data Usage Rights
 
 The datasets provided with MICA are derived from publicly available sources:
 
@@ -310,7 +324,10 @@ The datasets provided with MICA are derived from publicly available sources:
 - **Protein structures**: Retrieved from the Protein Data Bank (PDB)
 - **AlphaFold3 predictions**: Generated using the AlphaFold Server
 
-## 📚 How to Cite This Work
+</details>
+
+<details>
+<summary><h2>📚 How to Cite This Work</h2></summary>
 
 ### Primary Citation
 
@@ -352,7 +369,10 @@ If you use our curated datasets, please also cite:
 }
 ```
 
-## 📧 Contact
+</details>
+
+<details>
+<summary><h2>📧 Contact</h2></summary>
 
 **Jianlin (Jack) Cheng, PhD, AAAS Fellow**  
 Curators' Distinguished Professor  
@@ -362,3 +382,4 @@ University of Missouri
 Columbia, MO 65211, USA  
  **Email**: [chengji@missouri.edu](mailto:chengji@missouri.edu)
 
+</details>
