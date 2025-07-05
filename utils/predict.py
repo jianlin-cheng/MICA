@@ -195,6 +195,7 @@ class CryoEMPredictor:
             self._print_status(f"📊 Dataset Analysis:")
             self._print_status(f"   🔢 Total samples: {self.sample_count}")
             self._print_status(f"   🎯 Batch threshold: {self.batch_threshold}")
+            self._print_status(f"You may change batch threshold parameter: {self.batch_threshold} to lowe value if run on your local machine by changing its value in: utils/predict.py")
             
             if self.use_optimized_batching:
                 self.optimal_batch_size = self._calculate_optimal_batch_size()
