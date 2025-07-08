@@ -336,19 +336,18 @@ The datasets provided with MICA are derived from publicly available sources:
 If you use MICA in your research, please cite our paper:
 
 ```bibtex
-@article{mica2025,
-  title={Multimodal deep learning integration of cryo-EM and AlphaFold3 for high-accuracy protein structure  determination},
-  author={Gyawali, Rajan and
-          Dhakal, Ashwin and
-          Cheng, Jianlin},
-  journal={[Journal Name]},
-  year={2025},
-  volume={[Volume]},
-  number={[Issue]},
-  pages={[Pages]},
-  doi={[DOI]},
-  url={https://github.com/jianlin-cheng/MICA}
+@article {Gyawali2025.07.03.663071,
+	author = {Gyawali, Rajan and Dhakal, Ashwin and Cheng, Jianlin},
+	title = {Multimodal deep learning integration of cryo-EM and AlphaFold3 for high-accuracy protein structure determination},
+	elocation-id = {2025.07.03.663071},
+	year = {2025},
+	doi = {10.1101/2025.07.03.663071},
+	publisher = {Cold Spring Harbor Laboratory},
+	issn = {2692-8205},
+	URL = {https://www.biorxiv.org/content/early/2025/07/03/2025.07.03.663071},
+	journal = {bioRxiv}
 }
+
 ```
 
 ### Dataset Citation
@@ -375,8 +374,7 @@ If you use our curated datasets, please also cite:
 <summary><h2>📧 Contact</h2></summary>
 
 **Jianlin (Jack) Cheng, PhD, AAAS Fellow**  
-Curators' Distinguished Professor  
-William and Nancy Thompson Distinguished Professor  
+Curators' Distinguished Professor   
 Department of Electrical Engineering and Computer Science  
 University of Missouri  
 Columbia, MO 65211, USA  
