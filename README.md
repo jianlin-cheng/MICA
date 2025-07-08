@@ -336,7 +336,7 @@ The datasets provided with MICA are derived from publicly available sources:
 If you use MICA in your research, please cite our paper:
 
 ```bibtex
-@article {Gyawali2025.07.03.663071,
+@article{Gyawali2025.07.03.663071,
 	author = {Gyawali, Rajan and Dhakal, Ashwin and Cheng, Jianlin},
 	title = {Multimodal deep learning integration of cryo-EM and AlphaFold3 for high-accuracy protein structure determination},
 	elocation-id = {2025.07.03.663071},
@@ -356,12 +356,12 @@ If you use our curated datasets, please also cite:
 
 ```bibtex
 @dataset{gyawali_2025_15756654,
-  author = {Gyawali, Rajan and Dhakal, Ashwin and Cheng, Jianlin},
-  title = {Multimodal deep learning integration of cryo-EM and AlphaFold3 for high-accuracy protein structure determination},
-  year = {2025},
-  publisher={Zenodo},
-  doi={10.5281/zenodo.15756654},
-  url={https://zenodo.org/records/15756654},
+	author = {Gyawali, Rajan and Dhakal, Ashwin and Cheng, Jianlin},
+	title = {Multimodal deep learning integration of cryo-EM and AlphaFold3 for high-accuracy protein structure determination},
+	year = {2025},
+	publisher={Zenodo},
+	doi={10.5281/zenodo.15756654},
+	url={https://zenodo.org/records/15756654},
 }
 ```
 
