@@ -384,7 +384,7 @@ This project utilizes several key computational tools for data preprocessing and
 
 If you use MICA in your research, please cite the following tools as well:
 
-### Phenix
+#### Phenix
 ```bibtex
 @article{Liebschner2019,
 	author = {Liebschner, Dorothee and Afonine, Pavel V. and Baker, Matthew L. and Bunkóczi, Gábor and Chen, Vincent B. and Croll, Tristan I. and Hintze, Bradley and Hung, Li-Wei and Jain, Swati and McCoy, Airlie J. and Moriarty, Nigel W. and Oeffner, Robert D. and Poon, Billy K. and Prisant, Michael G. and Read, Randy J. and Richardson, Jane S. and Richardson, David C. and Sammito, Massimo D. and Sobolev, Oleg V. and Stockwell, Duncan H. and Terwilliger, Thomas C. and Urzhumtsev, Alexandre G. and Videau, Lizbeth L. and Williams, Christopher J. and Adams, Paul D.},
@@ -412,7 +412,7 @@ If you use MICA in your research, please cite the following tools as well:
 	doi = {10.1107/S2059798318006551}
 }
 ```
-### Merizo
+#### Merizo
 ```bibtex
 @article{Lau2023,
 	author = {Lau, Andy M. and Kandathil, Shaun M. and Jones, David T.},
@@ -426,7 +426,7 @@ If you use MICA in your research, please cite the following tools as well:
 }
 ```
 
-### EModelX(+AF)
+#### EModelX(+AF)
 ```bibtex
 @article{Chen2024,
 	author = {Chen, Sheng and Zhang, Sen and Fang, Xiaoyu and Lin, Liang and Zhao, Huiying and Yang, Yuedong},
@@ -440,7 +440,7 @@ If you use MICA in your research, please cite the following tools as well:
 }
 ```
 
-### PULCHRA
+#### PULCHRA
 ```bibtex
 @article{Rotkiewicz2008,
 	author = {Rotkiewicz, Piotr and Skolnick, Jeffrey},
@@ -454,7 +454,7 @@ If you use MICA in your research, please cite the following tools as well:
 }
 ```
 
-## License
+#### License
 
 Please ensure compliance with the individual licenses of each tool when using them in your research.
 </details>
