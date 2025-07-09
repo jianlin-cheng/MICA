@@ -387,13 +387,14 @@ If you use MICA in your research, please cite the following tools as well:
 ### Phenix
 ```bibtex
 @article{Liebschner2019,
-	author = {Liebschner, Dorothee and Afonine, Pavel V. and Baker, Matthew L. and Bunkóczi, Gábor and Chen, Vincent B. and Croll, Tristan I. and Hintze, Bradley and Hung, Li-Wei and Jain, Swati and McCoy, Airlie J. and Moriarty, Nigel W. and Oeffner, Robert D. and Poon, Billy K. and Prisant, Michael G. and Read, Randy J. and Richardson, Jane S. and Richardson, David C. and Sammito, Massimo D. and Sobolev, Oleg V. and Stockwell, Dawn H. and Terwilliger, Thomas C. and Urzhumtsev, Alexandre G. and Videau, Lizbeth L. and Williams, Christopher J. and Adams, Paul D.},
+	author = {Liebschner, Dorothee and Afonine, Pavel V. and Baker, Matthew L. and Bunkóczi, Gábor and Chen, Vincent B. and Croll, Tristan I. and Hintze, Bradley and Hung, Li-Wei and Jain, Swati and McCoy, Airlie J. and Moriarty, Nigel W. and Oeffner, Robert D. and Poon, Billy K. and Prisant, Michael G. and Read, Randy J. and Richardson, Jane S. and Richardson, David C. and Sammito, Massimo D. and Sobolev, Oleg V. and Stockwell, Duncan H. and Terwilliger, Thomas C. and Urzhumtsev, Alexandre G. and Videau, Lizbeth L. and Williams, Christopher J. and Adams, Paul D.},
 	title = {Macromolecular structure determination using X-rays, neutrons and electrons: recent developments in Phenix},
-	journal = {Acta Crystallographica Section D: Structural Biology},
+	journal = {Acta Crystallographica Section D},
 	volume = {75},
 	number = {10},
-	pages = {861-877},
+	pages = {861--877},
 	year = {2019},
+	month = {Oct},
 	doi = {10.1107/S2059798319011471}
 }
 ```
@@ -405,36 +406,37 @@ If you use MICA in your research, please cite the following tools as well:
 	journal = {Acta Crystallographica Section D},
 	volume = {74},
 	number = {6},
-	pages = {531-544},
+	pages = {531--544},
 	year = {2018},
+	month = {Jun},
 	doi = {10.1107/S2059798318006551}
 }
 ```
 ### Merizo
 ```bibtex
-@article{Postic2017,
-	author = {Postic, Guillaume and Ghouzam, Yassine and Guiraud, Vincent and Gelly, Jean-Christophe},
-	title = {Membrane positioning for high-and low-resolution protein structures through a binary classification approach},
-	journal = {Protein Engineering, Design and Selection},
-	volume = {30},
-	number = {6},
-	pages = {431-439},
-	year = {2017},
-	doi = {10.1093/protein/gzx010}
+@article{Lau2023,
+	author = {Lau, Andy M. and Kandathil, Shaun M. and Jones, David T.},
+	title = {Merizo: a rapid and accurate protein domain segmentation method using invariant point attention},
+	journal = {Nature Communications},
+	volume = {14},
+	number = {1},
+	pages = {8445},
+	year = {2023},
+	doi = {10.1038/s41467-023-43934-4}
 }
 ```
 
 ### EModelX(+AF)
 ```bibtex
 @article{Chen2024,
-	author = {Chen, Sheng and Su, Zhuohan and Shen, Dongsheng and Wang, Zhenwei and Ke, Yusong and Zeng, Jianyang and Ma, Jianpeng},
+	author = {Chen, Sheng and Zhang, Sen and Fang, Xiaoyu and Lin, Liang and Zhao, Huiying and Yang, Yuedong},
 	title = {Protein complex structure modeling by cross-modal alignment between cryo-EM maps and protein sequences},
 	journal = {Nature Communications},
 	volume = {15},
 	number = {1},
 	pages = {8808},
 	year = {2024},
-	doi = {10.1038/s41467-024-52933-3}
+	doi = {10.1038/s41467-024-53116-5}
 }
 ```
 
