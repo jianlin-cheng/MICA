@@ -372,17 +372,17 @@ If you use our curated datasets, please also cite:
 
 
 
-This project utilizes several key computational tools for structural biology analysis and AlphaFold3 structure processing. We gratefully acknowledge and thank the developers and maintainers of Phenix, Merizo, Pulchra, and EModelX(+AF) for their invaluable contributions to the structural biology community. These open-source tools have been utilized in MICA.
+This project utilizes several key computational tools for data preprocessing and postprocessing. We gratefully acknowledge and thank the developers and maintainers of Phenix, Merizo, Pulchra, and EModelX(+AF) for their invaluable contributions to the structural biology community. 
 
 **Phenix** has been utilized for docking AlphaFold3 predicted structures into cryo-EM density maps and refining the full atom model built by MICA.
 
-**Merizo** has been used for domain segmentation from AlphaFold3 predicted structures.
+**Merizo** has been used for domain segmentation from AlphaFold3-predicted structures.
 
 **EModelX(+AF)** has been utilized for backbone tracing from the results predicted from deep learning model of the MICA.
 
-**PULCHRA** has been used for full atom model building from the Ca-backbone model.
+**PULCHRA** has been used for full atom model building from the Cα-backbone model.
 
-If you use MICA in your research, please cite the following as well:
+If you use MICA in your research, please cite the following tools as well:
 
 ### Phenix
 ```bibtex
