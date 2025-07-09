@@ -368,7 +368,7 @@ If you use our curated datasets, please also cite:
 </details>
 
 <details>
-<summary><h2># 🙏 Acknowledgments</h2></summary>
+<summary><h2>🙏 Acknowledgments</h2></summary>
 
 
 
@@ -455,6 +455,7 @@ If you use MICA in your research, please cite the following as well:
 ## License
 
 Please ensure compliance with the individual licenses of each tool when using them in your research.
+</details>
 
 <details>
 <summary><h2>📧 Contact</h2></summary>
