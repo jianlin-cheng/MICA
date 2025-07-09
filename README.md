@@ -368,6 +368,95 @@ If you use our curated datasets, please also cite:
 </details>
 
 <details>
+<summary><h2># 🙏 Acknowledgments</h2></summary>
+
+
+
+This project utilizes several key computational tools for structural biology analysis and AlphaFold3 structure processing. We gratefully acknowledge and thank the developers and maintainers of Phenix, Merizo, Pulchra, and EModelX(+AF) for their invaluable contributions to the structural biology community. These open-source tools have been utilized in MICA.
+
+**Phenix** has been utilized for docking AlphaFold3 predicted structures into cryo-EM density maps and refining the full atom model built by MICA.
+
+**Merizo** has been used for domain segmentation from AlphaFold3 predicted structures.
+
+**EModelX(+AF)** has been utilized for backbone tracing from the results predicted from deep learning model of the MICA.
+
+**PULCHRA** has been used for full atom model building from the Ca-backbone model.
+
+If you use MICA in your research, please cite the following as well:
+
+### Phenix
+```bibtex
+@article{Liebschner2019,
+	author = {Liebschner, Dorothee and Afonine, Pavel V. and Baker, Matthew L. and Bunkóczi, Gábor and Chen, Vincent B. and Croll, Tristan I. and Hintze, Bradley and Hung, Li-Wei and Jain, Swati and McCoy, Airlie J. and Moriarty, Nigel W. and Oeffner, Robert D. and Poon, Billy K. and Prisant, Michael G. and Read, Randy J. and Richardson, Jane S. and Richardson, David C. and Sammito, Massimo D. and Sobolev, Oleg V. and Stockwell, Dawn H. and Terwilliger, Thomas C. and Urzhumtsev, Alexandre G. and Videau, Lizbeth L. and Williams, Christopher J. and Adams, Paul D.},
+	title = {Macromolecular structure determination using X-rays, neutrons and electrons: recent developments in Phenix},
+	journal = {Acta Crystallographica Section D: Structural Biology},
+	volume = {75},
+	number = {10},
+	pages = {861-877},
+	year = {2019},
+	doi = {10.1107/S2059798319011471}
+}
+```
+
+```bibtex
+@article{Afonine2018,
+	author = {Afonine, Pavel V. and Poon, Billy K. and Read, Randy J. and Sobolev, Oleg V. and Terwilliger, Thomas C. and Urzhumtsev, Alexandre and Adams, Paul D.},
+	title = {Real-space refinement in PHENIX for cryo-EM and crystallography},
+	journal = {Acta Crystallographica Section D},
+	volume = {74},
+	number = {6},
+	pages = {531-544},
+	year = {2018},
+	doi = {10.1107/S2059798318006551}
+}
+```
+### Merizo
+```bibtex
+@article{Postic2017,
+	author = {Postic, Guillaume and Ghouzam, Yassine and Guiraud, Vincent and Gelly, Jean-Christophe},
+	title = {Membrane positioning for high-and low-resolution protein structures through a binary classification approach},
+	journal = {Protein Engineering, Design and Selection},
+	volume = {30},
+	number = {6},
+	pages = {431-439},
+	year = {2017},
+	doi = {10.1093/protein/gzx010}
+}
+```
+
+### EModelX(+AF)
+```bibtex
+@article{Chen2024,
+	author = {Chen, Sheng and Su, Zhuohan and Shen, Dongsheng and Wang, Zhenwei and Ke, Yusong and Zeng, Jianyang and Ma, Jianpeng},
+	title = {Protein complex structure modeling by cross-modal alignment between cryo-EM maps and protein sequences},
+	journal = {Nature Communications},
+	volume = {15},
+	number = {1},
+	pages = {8808},
+	year = {2024},
+	doi = {10.1038/s41467-024-52933-3}
+}
+```
+
+### PULCHRA
+```bibtex
+@article{Rotkiewicz2008,
+	author = {Rotkiewicz, Piotr and Skolnick, Jeffrey},
+	title = {Fast procedure for reconstruction of full-atom protein models from reduced representations},
+	journal = {Journal of Computational Chemistry},
+	volume = {29},
+	number = {9},
+	pages = {1460-1465},
+	year = {2008},
+	doi = {10.1002/jcc.20906}
+}
+```
+
+## License
+
+Please ensure compliance with the individual licenses of each tool when using them in your research.
+
+<details>
 <summary><h2>📧 Contact</h2></summary>
 
 **Jianlin (Jack) Cheng, PhD, AAAS Fellow**  
