@@ -751,11 +751,14 @@ class Solver:
         self.logger.info(f"   📊 Backbone probability shape: {NNPred.BBProb.shape}")
         self.logger.info(f"   📊 CA probability shape: {self.CAProb.shape}")
         self.logger.info(f"Deleting all grids, normalized density map and AF3 encodings for disk space saving...")
-        shutil.rmtree(self.modeling_config.grids_path) 
-        os.remove(self.modeling_config.normalized_map_path) 
-        shutil.rmtree(self.modeling_config.AF3_encodings_path) 
-        self.logger.info(f"✓ Deleted all grids, normalized density map and AF3 encodings for disk space saving...")
-                                
+        try:
+            shutil.rmtree(self.modeling_config.grids_path) 
+            os.remove(self.modeling_config.normalized_map_path) 
+            shutil.rmtree(self.modeling_config.AF3_encodings_path) 
+            self.logger.info(f"✓ Deleted all grids, normalized density map and AF3 encodings for disk space saving...")
+        except:
+            self.logger.info(f"❌ Failed to delete some temporary files. Continuing...")          
+                          
     def clustering(self):
         """Perform clustering of CA candidates."""
         self.logger.info(f"Starting clustering with eps={self.cluster_eps}, min_points={self.cluster_min_points}")
