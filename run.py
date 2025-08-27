@@ -53,19 +53,19 @@ if __name__ == '__main__':
                        help='Path of cryo-EM map.')
     parser.add_argument('-f', '--fasta_path', type=str, required=True, 
                        help='Path of fasta file.')
-    parser.add_argument('-i', '--input_path', type=str, required=True, 
-                       help='Path containing data for your protein. Example: input/39164 or input/protein')
+    parser.add_argument('-a', '--AF3_results_path', type=str, required=True, 
+                       help='Path containing AF3 results. Example: input/39164/AF3_results or input/protein/AF3_results')
     
     # Optional processing
     parser.add_argument('--run_pulchra', action='store_true', 
                        help='Whether to run pulchra for all_atom construction')
-    parser.add_argument('--pulchra_path', type=str, 
+    parser.add_argument('-p', '--pulchra_path', type=str, 
                        help='Directory of pulchra, e.g.: modules/pulchra304/src/pulchra')
     parser.add_argument('--run_phenix', action='store_true', 
                        help='Whether to run phenix.real_space_refine')
     parser.add_argument('-r', '--resolution', type=float, 
                        help='Resolution of cryo-EM map, required when run_phenix_real_space_refine is open')
-    parser.add_argument('--phenix_act', type=str, 
+    parser.add_argument('-x', '--phenix_act', type=str, 
                        help='Script to activate phenix environment, e.g.: modules/phenix-1.20.1-4487/phenix_env.sh')
     parser.add_argument('--phenix_param', default='modules/phenix.eff', type=str, 
                        help='Param for phenix.real_space_refine')
@@ -105,11 +105,10 @@ if __name__ == '__main__':
         modeling_config.mul_proc_num = max(int(cpu_cores * 0.75), 1)
     
     # Set up paths
-    modeling_config.AF3_results = os.path.join(modeling_config.input_path, 'AF3_results')
-    modeling_config.AF3_structure_path = os.path.join(modeling_config.input_path, 'AF3_structures')
-    modeling_config.grids_path = os.path.join(modeling_config.input_path, 'grids')
-    modeling_config.normalized_map_path = os.path.join(modeling_config.input_path, 'resampled_normalized_map.mrc')
-    modeling_config.AF3_encodings_path = os.path.join(modeling_config.input_path, 'AF3_encodings')
+    modeling_config.AF3_structure_path = os.path.join(os.path.dirname(modeling_config.AF3_results_path), 'AF3_structures')
+    modeling_config.grids_path = os.path.join(os.path.dirname(modeling_config.AF3_results_path), 'grids')
+    modeling_config.normalized_map_path = os.path.join(os.path.dirname(modeling_config.AF3_results_path), 'resampled_normalized_map.mrc')
+    modeling_config.AF3_encodings_path = os.path.join(os.path.dirname(modeling_config.AF3_results_path), 'AF3_encodings')
     
     # Set random seed
     torch.manual_seed(modeling_config.seed)
