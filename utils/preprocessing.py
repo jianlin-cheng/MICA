@@ -39,7 +39,7 @@ class DataPreprocessor:
         4. Create grids of 64x64x64 for each channel of encoded volume from (3).
     """
     
-    def __init__(self, map_path, AF3_results, normalized_map_path=None, quiet=True):
+    def __init__(self, map_path, AF3_results_path, normalized_map_path=None, quiet=True):
         """
         Initialize the AF3 docked structure combiner.
         
@@ -47,7 +47,7 @@ class DataPreprocessor:
             quiet: Whether to suppress BioPython parser warnings
         """
         self.map_path = map_path
-        self.AF3_results = AF3_results
+        self.AF3_results_path = AF3_results_path
         self.normalized_map_path = normalized_map_path
         self.parser = PDB.PDBParser(QUIET=quiet)
         self.io = PDB.PDBIO()
@@ -133,7 +133,7 @@ class DataPreprocessor:
                     map_data_ /= percentile_value
                     self.logger.info(f"✓ Normalized map shape: {map_data_.shape}")
                     
-                    self.normalized_map_path =  os.path.join(os.path.dirname(self.AF3_results), 'resampled_normalized_map.mrc')
+                    self.normalized_map_path =  os.path.join(os.path.dirname(self.AF3_results_path), 'resampled_normalized_map.mrc')
 
                     with mrcfile.new(self.normalized_map_path, overwrite=True) as mrc:
                         mrc.set_data(map_data_.astype(np.float32))
@@ -299,7 +299,7 @@ class DataPreprocessor:
             
             self.logger.info(f"✓ Processed {residues_processed} residues, {atoms_processed} atoms")
             
-            self.AF3_encodings = os.path.join(os.path.dirname(self.AF3_results), 'AF3_encodings')
+            self.AF3_encodings = os.path.join(os.path.dirname(self.AF3_results_path), 'AF3_encodings')
             
             # Create output directory
             os.makedirs(self.AF3_encodings, exist_ok=True)            
@@ -363,7 +363,7 @@ Examples:
     )
     parser.add_argument('-m', '--map_path',
                        help='Path to cryo-EM density map file (.map, .mrc, .ccp4)')
-    parser.add_argument('-a', '--AF3_results', required=True, 
+    parser.add_argument('-a', '--AF3_results_path', required=True, 
                        help='AF3 results directory containing subdirectories with docked models')
     parser.add_argument('--quiet', action='store_true', 
                        help='Suppress detailed output')
@@ -374,20 +374,20 @@ Examples:
     if not os.path.exists(args.map_path):
         print(f"❌ Error: Cryo-EM density map path not found: {args.map_path}")
         sys.exit(1)
-    if not os.path.exists(args.AF3_results):
-        print(f"❌ Error: AF3 results directory not found: {args.AF3_results}")
+    if not os.path.exists(args.AF3_results_path):
+        print(f"❌ Error: AF3 results directory not found: {args.AF3_results_path}")
         sys.exit(1)
     
-    data_processor = DataPreprocessor(map_path=args.map_path, AF3_results=args.AF3_results, quiet=args.quiet)
+    data_processor = DataPreprocessor(map_path=args.map_path, AF3_results_path=args.AF3_results_path, quiet=args.quiet)
     
     # Log startup information
     data_processor.print_clean("")
-    data_processor.logger.info(f"AF3 results directory: {args.AF3_results}")
+    data_processor.logger.info(f"AF3 results directory: {args.AF3_results_path}")
     data_processor.logger.info(f"Cryo-EM map path: {args.map_path}")
     
     try:
         data_processor.resample_and_normalize_map()  
-        combined_docked_model_path = os.path.join(os.path.dirname(args.AF3_results), f'{os.path.basename(os.path.dirname(args.AF3_results))}_af3_docked.pdb')       
+        combined_docked_model_path = os.path.join(os.path.dirname(args.AF3_results_path), f'{os.path.basename(os.path.dirname(args.AF3_results_path))}_af3_docked.pdb')       
         if os.path.exists(combined_docked_model_path):
             encoding_result = data_processor.create_AF3_encodings(combined_docked_model_path) 
             

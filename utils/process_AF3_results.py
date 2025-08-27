@@ -256,14 +256,14 @@ class AF3ResultsProcessor:
         matches = [protein for protein in protein_list if protein['protein_id'] == target_id]
         return matches[0] if matches else None
 
-    def convert_single_cif_to_pdb(self, cif_file, fasta_content, AF3_results):
+    def convert_single_cif_to_pdb(self, cif_file, fasta_content, AF3_results_path):
         """
         Convert a single CIF file to PDB format.
         
         Args:
             cif_file (str): Path to the CIF file
             fasta_content (str): FASTA sequence content
-            AF3_results (str): Input directory for AF3 results
+            AF3_results_path (str): Input directory for AF3 results
         
         Returns:
             bool: True if conversion successful, False otherwise
@@ -297,11 +297,11 @@ class AF3ResultsProcessor:
                 pdb_io.set_structure(structure)
                 
                 # Create input directory to store chains
-                input_location = AF3_results.replace("results", "PDBs")
+                input_location = AF3_results_path.replace("results", "PDBs")
                 os.makedirs(input_location, exist_ok=True)
                 
                 # Create directory to store structures to be utilized for post processing
-                structures_location = AF3_results.replace("results", "structures")
+                structures_location = AF3_results_path.replace("results", "structures")
                 os.makedirs(structures_location, exist_ok=True)
                 
                 input_pdb_file = f"{input_location}/{c_file}.pdb"
@@ -323,13 +323,13 @@ class AF3ResultsProcessor:
             self.failed_entries.append(cif_file)
             return False
 
-    def convert_cif_to_pdb(self, fasta_file, AF3_results):
+    def convert_cif_to_pdb(self, fasta_file_path, AF3_results_path):
         """
         Convert CIF files to PDB format with matching FASTA file.
         
         Args:        
-            fasta_file (str): Location of FASTA file  
-            AF3_results (str): Directory containing CIF files
+            fasta_file_path (str): Location of FASTA file  
+            AF3_results_path (str): Directory containing CIF files
         
         Returns:
             dict: Results summary
@@ -339,11 +339,11 @@ class AF3ResultsProcessor:
         self.print_clean("🔄 CIF TO PDB CONVERSION")
         self.print_clean("=" * 80)
         
-        cif_files = sorted(glob(f"{AF3_results}/*/*_model_0.cif"))
+        cif_files = sorted(glob(f"{AF3_results_path}/*/*_model_0.cif"))
         if len(cif_files) == 0:
-            self.logger.error(f"No AlphaFold3 structures found in {AF3_results}")
+            self.logger.error(f"No AlphaFold3 structures found in {AF3_results_path}")
             self.print_clean("")
-            self.print_clean("💡 Expected structure format: {AF3_results}/*/{protein_id}_model_0.cif")
+            self.print_clean("💡 Expected structure format: {AF3_results_path}/*/{protein_id}_model_0.cif")
             self.print_clean("")
             return {"successful": [], "failed": [], "total": 0}
         
@@ -353,19 +353,19 @@ class AF3ResultsProcessor:
         
         for cif_file in cif_files:
             try:                
-                if not fasta_file:
+                if not fasta_file_path:
                     self.logger.error("No FASTA file provided")
                     failed.append(cif_file)
                     continue
                                
                 # Read FASTA content
-                with open(fasta_file, 'r') as f:
+                with open(fasta_file_path, 'r') as f:
                     fasta_content = f.read()
                 
                 success = self.convert_single_cif_to_pdb(
                     cif_file=cif_file,
                     fasta_content=fasta_content,
-                    AF3_results=AF3_results
+                    AF3_results_path=AF3_results_path
                 )
                 
                 if success:
@@ -391,19 +391,19 @@ class AF3ResultsProcessor:
             "total": len(cif_files)
         }
         
-    def split_individual_chains(self, AF3_results):
+    def split_individual_chains(self, AF3_results_path):
         """
         Split PDB files to individual chains.
         
         Args:        
-            AF3_results (str): Directory containing AF3 results
+            AF3_results_path (str): Directory containing AF3 results
         """
         self.print_clean("=" * 80)
         self.print_clean("⛓️  SPLITTING CHAINS")
         self.print_clean("=" * 80)
         
-        pdb_location = os.path.join(os.path.dirname(AF3_results), 'AF3_PDBs')
-        chain_location = os.path.join(os.path.dirname(AF3_results), 'AF3_chains')
+        pdb_location = os.path.join(os.path.dirname(AF3_results_path), 'AF3_PDBs')
+        chain_location = os.path.join(os.path.dirname(AF3_results_path), 'AF3_chains')
         os.makedirs(chain_location, exist_ok=True)
         
         pdb_files = glob(f"{pdb_location}/*.pdb")
@@ -449,12 +449,12 @@ class AF3ResultsProcessor:
         self.print_clean(f"   📁 Saved to: {chain_location}")
         self.print_clean("")
         
-    def split_individual_domains(self, AF3_results):
+    def split_individual_domains(self, AF3_results_path):
         """
         Split PDB files to individual domains using Merizo.
         
         Args:        
-            AF3_results (str): Directory containing AF3 results
+            AF3_results_path (str): Directory containing AF3 results
         """
         self.print_clean("=" * 80)
         self.print_clean("🧩 SPLITTING DOMAINS WITH MERIZO")
@@ -462,8 +462,8 @@ class AF3ResultsProcessor:
         self.print_clean("⏳ This process may take some time - please be patient...")
         self.print_clean("")
         
-        chain_location = os.path.join(os.path.dirname(AF3_results), 'AF3_chains')
-        domain_location = os.path.join(os.path.dirname(AF3_results), 'AF3_domains')
+        chain_location = os.path.join(os.path.dirname(AF3_results_path), 'AF3_chains')
+        domain_location = os.path.join(os.path.dirname(AF3_results_path), 'AF3_domains')
         os.makedirs(domain_location, exist_ok=True)
         
         chain_files = glob(f"{chain_location}/*chain*.pdb")
@@ -507,18 +507,18 @@ class AF3ResultsProcessor:
 def main():
     """Command line interface."""
     parser = argparse.ArgumentParser(description='Convert AlphaFold3 CIF files to PDB format with chain and domain splitting')
-    parser.add_argument('-f', '--fasta_file', required=True, help='Path to FASTA file')
-    parser.add_argument('-a', '--AF3_results', required=True, help='Path to directory containing AlphaFold3 Results (Example: input/protein/AF3_results)')
+    parser.add_argument('-f', '--fasta_file_path', required=True, help='Path to FASTA file')
+    parser.add_argument('-a', '--AF3_results_path', required=True, help='Path to directory containing AlphaFold3 Results (Example: input/protein/AF3_results)')
     
     args = parser.parse_args()
     
     # Validate inputs
-    if not os.path.exists(args.fasta_file):
-        print(f"❌ Error: FASTA file not found: {args.fasta_file}")
+    if not os.path.exists(args.fasta_file_path):
+        print(f"❌ Error: FASTA file not found: {args.fasta_file_path}")
         sys.exit(1)
     
-    if not os.path.exists(args.AF3_results):
-        print(f"❌ Error: AF3 results directory not found: {args.AF3_results}")
+    if not os.path.exists(args.AF3_results_path):
+        print(f"❌ Error: AF3 results directory not found: {args.AF3_results_path}")
         sys.exit(1)
     
     # Create converter instance
@@ -526,22 +526,22 @@ def main():
     
     # Log startup information
     converter.print_clean("")
-    converter.logger.info(f"FASTA file: {args.fasta_file}")
-    converter.logger.info(f"AF3 results: {args.AF3_results}")
+    converter.logger.info(f"FASTA file: {args.fasta_file_path}")
+    converter.logger.info(f"AF3 results: {args.AF3_results_path}")
     
     # Process the files
     try:
         # Step 1: Convert CIF to PDB
         results = converter.convert_cif_to_pdb(
-            fasta_file=args.fasta_file,
-            AF3_results=args.AF3_results,
+            fasta_file_path=args.fasta_file_path,
+            AF3_results_path=args.AF3_results_path,
         )
         
         # Step 2: Split individual chains
-        converter.split_individual_chains(AF3_results=args.AF3_results)
+        converter.split_individual_chains(AF3_results_path=args.AF3_results_path)
         
         # Step 3: Split individual domains
-        converter.split_individual_domains(AF3_results=args.AF3_results)
+        converter.split_individual_domains(AF3_results_path=args.AF3_results_path)
         
         # Final summary
         converter.print_clean("=" * 80)

@@ -20,6 +20,7 @@ Date: June 1, 2025
 
 import argparse
 import os
+import multiprocessing
 import shutil
 import subprocess
 import sys
@@ -36,7 +37,7 @@ from scipy.ndimage import distance_transform_edt
 class PhenixDockingProcessor:
     """Main class for Phenix docking operations."""
     
-    def __init__(self, phenix_command, AF3_results, log_directory=None, quiet=True):
+    def __init__(self, phenix_command, AF3_results_path, log_directory=None, quiet=True):
         """
         Initialize the docking processor.
         
@@ -45,7 +46,7 @@ class PhenixDockingProcessor:
             log_directory: Directory to store log files
         """
         self.phenix_command = phenix_command
-        self.AF3_results = AF3_results
+        self.AF3_results_path = AF3_results_path
         self.parser = PDB.PDBParser(QUIET=quiet)
         self.io = PDB.PDBIO()
         self.failed_models = []
@@ -174,13 +175,17 @@ class PhenixDockingProcessor:
             bool: True if docking successful, False otherwise
         """
         model_name = os.path.basename(atomic_model)
+        # available_cpus = multiprocessing.cpu_count()
+        # optimal_nproc = int(available_cpus * 0.7)
+        # optimal_nproc = max(optimal_nproc, 24)
+        optimal_nproc = 24
         
         # Build Phenix command arguments
         phenix_args = [
             'phenix.dock_in_map',
             f'search_model={atomic_model}',
             f'map_file={density_map}',
-            'nproc=16',
+            f'nproc={optimal_nproc}',
             'quick=False',
             f'resolution={resolution}',
             f'pdb_out={save_file}',
@@ -411,14 +416,14 @@ class PhenixDockingProcessor:
             raise ValueError(error_msg)
         
         if dock_type == 'domainwise':
-            atomic_models_directory = os.path.join(os.path.dirname(self.AF3_results), 'AF3_domains')
+            atomic_models_directory = os.path.join(os.path.dirname(self.AF3_results_path), 'AF3_domains')
         else:
-            atomic_models_directory = os.path.join(os.path.dirname(self.AF3_results), 'AF3_chains')
+            atomic_models_directory = os.path.join(os.path.dirname(self.AF3_results_path), 'AF3_chains')
         
         # Create directories
         os.makedirs(atomic_models_directory, exist_ok=True)
-        docked_models_directory = os.path.join(os.path.dirname(self.AF3_results), 'AF3_docked_models')
-        temp_maps_directory = os.path.join(os.path.dirname(self.AF3_results), 'temp_maps')
+        docked_models_directory = os.path.join(os.path.dirname(self.AF3_results_path), 'AF3_docked_models')
+        temp_maps_directory = os.path.join(os.path.dirname(self.AF3_results_path), 'temp_maps')
         os.makedirs(docked_models_directory, exist_ok=True)
         os.makedirs(temp_maps_directory, exist_ok=True)
         
@@ -617,7 +622,7 @@ class PhenixDockingProcessor:
         self.print_clean("🔗 AF3 DOCKED STRUCTURES COMBINING")
         self.print_clean("=" * 80)
         success = False
-        docked_results_dir = os.path.join(os.path.dirname(self.AF3_results), 'AF3_docked_models')
+        docked_results_dir = os.path.join(os.path.dirname(self.AF3_results_path), 'AF3_docked_models')
         
         self.logger.info(f"Processing docked AF3 structures from: {docked_results_dir}")
         
@@ -642,7 +647,7 @@ class PhenixDockingProcessor:
         self.logger.info(f"Starting combination of {len(pdb_files)} PDB files")
         
         # Set output path
-        self.combined_docked_model_path = os.path.join(os.path.dirname(self.AF3_results), f'{os.path.basename(os.path.dirname(self.AF3_results))}_af3_docked.pdb')
+        self.combined_docked_model_path = os.path.join(os.path.dirname(self.AF3_results_path), f'{os.path.basename(os.path.dirname(self.AF3_results_path))}_af3_docked.pdb')
         
         # Create a new structure with a single model
         combined_structure = PDB.Structure.Structure("combined")
@@ -745,7 +750,7 @@ python docking_script.py \\
     --contour_level 0.3 \\
     --resolution 3.2 \\
     --fasta_file protein.fasta \\
-    --AF3_results "../input/protein/AF3_results/" \\
+    --AF3_results_path "../input/protein/AF3_results/" \\
     --dock_type domainwise \\
     --phenix_act "/path/to/phenix_env.sh"
         """
@@ -755,9 +760,9 @@ python docking_script.py \\
     parser.add_argument('-c', '--contour_level', type=float, required=True, help='Contour level value')
     parser.add_argument('-r', '--resolution', type=float, required=True, help='Resolution value in Angstroms')
     parser.add_argument('-f', '--fasta_file', required=True, help='Path to FASTA sequence file')
-    parser.add_argument('-a', '--AF3_results', required=True, help='Path to directory containing AlphaFold3 results (e.g., "../input/protein_AF3_results")')
+    parser.add_argument('-a', '--AF3_results_path', required=True, help='Path to directory containing AlphaFold3 results (e.g., "../input/protein/AF3_results")')
     parser.add_argument('--dock_type', choices=['chainwise', 'domainwise'], default='domainwise', help='Type of docking: chainwise or domainwise atomic models (default: domainwise)')
-    parser.add_argument('--phenix_act', required=True, help='Path to Phenix environment activation script (e.g., "/path/to/phenix_env.sh")')
+    parser.add_argument('-x', '--phenix_act', required=True, help='Path to Phenix environment activation script (e.g., "/path/to/phenix_env.sh")')
         
     args = parser.parse_args()
     
@@ -772,8 +777,8 @@ python docking_script.py \\
         errors.append(f"Density map not found: {args.density_map}")
     if not os.path.exists(args.fasta_file):
         errors.append(f"FASTA file not found: {args.fasta_file}")
-    if not os.path.exists(args.AF3_results):
-        errors.append(f"AF3 results directory not found: {args.AF3_results}")
+    if not os.path.exists(args.AF3_results_path):
+        errors.append(f"AF3 results directory not found: {args.AF3_results_path}")
     if not os.path.exists(args.phenix_act):
         errors.append(f"Phenix activation script not found: {args.phenix_act}")
     
@@ -788,11 +793,11 @@ python docking_script.py \\
     print("")
     
     try:
-        log_dir = os.path.join(os.path.dirname(args.AF3_results), 'docking_logs')
+        log_dir = os.path.join(os.path.dirname(args.AF3_results_path), 'docking_logs')
 
         processor = PhenixDockingProcessor(
             phenix_command=args.phenix_act,
-            AF3_results=args.AF3_results,
+            AF3_results_path=args.AF3_results_path,
             log_directory=log_dir
         )
         

@@ -673,11 +673,11 @@ class Solver:
     def getData(self):
         """Preprocess cryo-EM map and AF3 predicted data."""
         data_processor = DataPreprocessor(map_path=self.modeling_config.map_path, 
-                                          AF3_results=self.modeling_config.AF3_results, 
+                                          AF3_results_path=self.modeling_config.AF3_results_path, 
                                           quiet=self.modeling_config.quiet
                                           )   
         data_processor.resample_and_normalize_map()           
-        combined_docked_model_path = os.path.join(os.path.dirname(self.modeling_config.AF3_results), f'{os.path.basename(os.path.dirname(self.modeling_config.AF3_results))}_af3_docked.pdb')      
+        combined_docked_model_path = os.path.join(os.path.dirname(self.modeling_config.AF3_results_path), f'{os.path.basename(os.path.dirname(self.modeling_config.AF3_results_path))}_af3_docked.pdb')      
         if os.path.exists(combined_docked_model_path):
             encoding_result = data_processor.create_AF3_encodings(combined_docked_model_path)        
         

@@ -309,7 +309,6 @@ def main():
     """Command line interface."""
     parser = argparse.ArgumentParser(description='Convert FASTA sequences to AlphaFold3 JSON format')
     parser.add_argument('-f', '--fasta_file', required=True, help='Path to FASTA file')
-    parser.add_argument('-i', '--input_dir', default='input', help='Base input directory')
     parser.add_argument('-n', '--name', default='protein', help='Name of the protein or cryo-EM map ID. Every inputs will be stored like input/protein/...')
     
     args = parser.parse_args()
@@ -320,7 +319,6 @@ def main():
     # Process the file
     created_files = converter.process_fasta_file(
         fasta_file=args.fasta_file,
-        input_dir=args.input_dir,
         base_name=args.name
     )
     
