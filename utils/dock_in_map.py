@@ -811,12 +811,6 @@ python docking_script.py \\
         
         if len(results['successful']) >=1 :
             processor.combine_af3_docked_results()
-        
-        # Exit with appropriate code
-        if results['failed']:
-            sys.exit(1)  # Some failures occurred
-        else:
-            sys.exit(0)  # All successful
             
     except KeyboardInterrupt:
         print("")
