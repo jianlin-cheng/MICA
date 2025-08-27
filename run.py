@@ -102,7 +102,7 @@ if __name__ == '__main__':
     # Auto-detect process count if set to 1
     if modeling_config.mul_proc_num == 1:
         cpu_cores = multiprocessing.cpu_count()
-        modeling_config.mul_proc_num = max(int(cpu_cores * 0.75), 1)
+        modeling_config.mul_proc_num = min(max(int(cpu_cores * 0.6), 1), 24)
     
     # Set up paths
     modeling_config.AF3_structure_path = os.path.join(os.path.dirname(modeling_config.AF3_results_path), 'AF3_structures')

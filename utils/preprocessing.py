@@ -308,7 +308,7 @@ class DataPreprocessor:
             failed_channels = 0
             
             total_cores = mp.cpu_count()
-            max_workers = min(max(1, int(total_cores * 0.5)), 24)
+            max_workers = min(max(1, int(total_cores * 0.6)), 24)
             self.logger.info(f"Saving {num_channels} channels encodings using {max_workers} CPU cores in parallel")
             mp_args = []
             for channel_idx, channel_name in enumerate(channel_names):

@@ -175,10 +175,8 @@ class PhenixDockingProcessor:
             bool: True if docking successful, False otherwise
         """
         model_name = os.path.basename(atomic_model)
-        # available_cpus = multiprocessing.cpu_count()
-        # optimal_nproc = int(available_cpus * 0.7)
-        # optimal_nproc = max(optimal_nproc, 24)
-        optimal_nproc = 24
+        cpu_cores = multiprocessing.cpu_count()
+        optimal_nproc = min(max(int(cpu_cores * 0.6), 1), 48)
         
         # Build Phenix command arguments
         phenix_args = [
