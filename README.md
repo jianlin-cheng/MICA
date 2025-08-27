@@ -92,7 +92,7 @@ MICA/
 
 Run the following commands sequentially inside *MICA location*.
 
-#### 2.1 Generate AlphaFold3 JSON files
+### 2.1 Generate AlphaFold3 JSON files
 **Required Format:**
 ```bash
 python utils/fasta_to_AF3_json.py -f <path/to/fasta/file> -n <protein_name or Map ID>
@@ -109,18 +109,7 @@ python utils/fasta_to_AF3_json.py -f input/15635/8at6.fasta -n 15635
   - `input/15635/AF3_results/8at6_2/*model_0.cif`
   - `input/15635/AF3_results/8at6_3/*model_0.cif`
 
-#### 2.2 Process AlphaFold3 results
-**Required Format:**
-```bash
-python utils/process_AF3_results.py -f <path/to/fasta/file> -a <path/to/AF3_results>
-```
-
-**Example:**
-```bash
-python utils/process_AF3_results.py -f input/15635/8at6.fasta -a input/15635/AF3_results
-```
-
-#### 2.3 Get map parameters if Cryo-EM map is available in EMDB website (Optional)
+### 2.2 Get map parameters if Cryo-EM map is available in EMDB website (Optional)
 
 **Required Format:**
 ```bash
@@ -132,7 +121,103 @@ python utils/emdb_extractor.py --emdb_id <EMDB_ID>
 python utils/emdb_extractor.py --emdb_id 15635
 ```
 
-#### 2.4 Dock domains into cryo-EM map
+**Output:**
+This script extracts and returns the contour level and resolution parameters from the EMDB database, which are required for the docking process in subsequent steps.
+
+**Returns:**
+- `contour_level`: The recommended contour level for docking
+- `resolution`: The map resolution in Angstroms
+
+---
+
+### 🚀 Processing Options
+
+> **Choose ONE of the following approaches:**
+> - **Option A:** Use the automated pipeline (Step 2.3) - **Recommended for most users**
+> - **Option B:** Run individual steps step-by-step (Steps 2.4-2.6) - **Helpful for step-by-step results or debugging**
+
+<details>
+<summary><h3>🎯 Option A: Automated Pipeline (Recommended)</h3></summary>
+
+### 2.3 MICA atomic model building pipeline 
+This MICA pipeline is a comprehensive bash script that automates the execution of three essential protein processing programs in sequence. This pipeline streamlines the workflow from AlphaFold 3 results processing through cryo-EM map docking to final atomic model building.
+
+**Pipeline Steps:**
+The script executes three programs in the following order:
+1. **process_AF3_results.py** - Process AlphaFold3 (AF3) results and divides into domains using Merizo
+2. **dock_in_map.py** - Dock AF3 domain structures into cryo-EM map 
+3. **run.py** - Run data preprocessing, deep learning prediction and atomic model building
+
+**Required Format:**
+```bash
+./protein_pipeline.sh [OPTIONS]
+```
+
+**Interactive Mode:**
+```bash
+./protein_pipeline.sh
+```
+*Prompts for all required inputs*
+
+**Example:**
+```bash
+./protein_pipeline.sh \
+    -f input/15635/8at6.fasta \
+    -a input/15635/AF3_results \
+    -m input/15635/emd_15635.map \
+    -c 0.0242 \
+    -r 3.7 \
+    -p modules/pulchra304/src/pulchra \
+    -x ../phenix/phenix-1.20.1-4487/phenix_env.sh
+```
+
+**Command Line Options:**
+
+| Option | Long Form | Type | Description |
+|--------|-----------|------|-------------|
+| `-f` | `--fasta_path` | `PATH` | Path to FASTA file **(required)** |
+| `-a` | `--AF3_results_path` | `DIR` | Path to AF3 results directory **(required)** |
+| `-m` | `--map_path` | `PATH` | Path to cryo-EM map file **(required)** |
+| `-c` | `--contour_level` | `VALUE` | Contour level for docking **(required)** |
+| `-r` | `--resolution` | `VALUE` | Resolution value **(required)** |
+| `-p` | `--pulchra_path` | `PATH` | Path to Pulchra executable **(required)** |
+| `-x` | `--phenix_act` | `PATH` | Path to Phenix activation script **(required)** |
+| `-d` | `--device` | `DEVICE` | Device for running code (`cpu`, `cuda`, `cuda:1`, etc) **(optional)** |
+| `-h` | `--help` | - | Show help message |
+
+**Output:**
+The pipeline automatically generates detailed execution timing logs and atomic models.
+
+**Returns:**
+##### A. CSV Timing Log
+- ***Format:*** `{fasta_name}_execution_times_YYYYMMDD_HHMMSS.csv`
+- ***Example:*** `8at6_execution_times_20240826_143022.csv`
+
+##### B. Final Atomic Model
+- ***Format:*** `output/{identifier}_{fasta_name}_MICA_all_atom_model.pdb`
+- ***Example:*** `output/15635_8at6_MICA_all_atom_model.pdb`
+
+> ✅ **If you used Option A (Step 2.3), you're done! Skip to [Step 3: Results] section.**
+
+</details>
+
+<details>
+<summary><h3>🔧 Option B: Step-by-Step Process</h3></summary>
+
+> ⚠️ **Note:** Only use this option if you did NOT run Step 2.3 or need to debug individual steps.
+
+### 2.4 Process AlphaFold3 results
+**Required Format:**
+```bash
+python utils/process_AF3_results.py -f <path/to/fasta/file> -a <path/to/AF3_results>
+```
+
+**Example:**
+```bash
+python utils/process_AF3_results.py -f input/15635/8at6.fasta -a input/15635/AF3_results
+```
+
+### 2.5 Dock domains into cryo-EM map (Skip this step if you don't want to use AF3 at input level)
 **Required Format:**
 ```bash
 python utils/dock_in_map.py \
@@ -141,7 +226,7 @@ python utils/dock_in_map.py \
     -r <resolution> \
     -f <path/to/fasta/file> \
     -a <path/to/AF3_results> \
-    --phenix_act <path/to/phenix/activation>
+    -x <path/to/phenix/activation>
 ```
 
 **Example:**
@@ -152,21 +237,20 @@ python utils/dock_in_map.py \
     -r 3.7 \
     -f input/15635/8at6.fasta \
     -a input/15635/AF3_results \
-    --phenix_act ../phenix/phenix-1.20.1-4487/phenix_env.sh
+    -x <path/to/phenix/activation>
 ```
 
-#### 2.5 Run data preprocessing, deep learning prediction and atomic model building
+### 2.6 Run data preprocessing, deep learning prediction and atomic model building
 **Required Format:**
 ```bash
 python run.py \
     -m <path/to/cryo-EM/map> \
     -f <path/to/fasta/file> \
-    -i <protein/dataset_identifier> \
-    --run_pulchra \
-    --pulchra_path=<path/to/pulchra> \
+    -a <path/to/AF3_results> \
+    -p <path/to/pulchra> \
     --run_phenix \
-    --phenix_act=<path/to/phenix/activation> \
-    --resolution=<resolution>
+    -x <path/to/phenix/activation> \
+    -r <resolution>
 ```
 
 **Example:**
@@ -174,15 +258,18 @@ python run.py \
 python run.py \
     -m input/15635/emd_15635.map \
     -f input/15635/8at6.fasta \
-    -i input/15635 \
-    --run_pulchra \
-    --pulchra_path=modules/pulchra304/src/pulchra \
+    -a input/15635/AF3_results \
+    -p modules/pulchra304/src/pulchra \
     --run_phenix \
-    --phenix_act=../phenix/phenix-1.20.1-4487/phenix_env.sh \
-    --resolution=3.7
+    -x <path/to/phenix/activation> \
+    -r 3.7
 ```
 
-#### 2.6 Results
+</details>
+
+---
+
+### 🧬 Step 3: Results
 Final atomic model will be saved in: `output/15635_8at6_MICA_all_atom_model.pdb`
 
 </details>
