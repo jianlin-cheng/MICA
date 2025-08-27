@@ -133,11 +133,11 @@ This script extracts and returns the contour level and resolution parameters fro
 ### 🚀 Processing Options
 
 > **Choose ONE of the following approaches:**
-> - **Option A:** Use the automated pipeline (Step 2.3) - **Recommended for most users**
-> - **Option B:** Run individual steps step-by-step (Steps 2.4-2.6) - **Helpful for step-by-step results or debugging**
+> - **Option A:** Complete Pipeline (Step 2.3) - **Recommended for most users**
+> - **Option B:** Step-by-Step Pipeline(Steps 2.4-2.6) - **Helpful for step-by-step results or debugging**
 
 <details>
-<summary><h3>🎯 Option A: Automated Pipeline (Recommended)</h3></summary>
+<summary><h3>🎯 Option A: Complete Pipeline (Recommended)</h3></summary>
 
 ### 2.3 MICA atomic model building pipeline 
 This MICA pipeline is a comprehensive bash script that automates the execution of three essential protein processing programs in sequence. This pipeline streamlines the workflow from AlphaFold 3 results processing through cryo-EM map docking to final atomic model building.
@@ -202,7 +202,7 @@ The pipeline automatically generates detailed execution timing logs and atomic m
 </details>
 
 <details>
-<summary><h3>🔧 Option B: Step-by-Step Process</h3></summary>
+<summary><h3>🔧 Option B: Step-by-Step Pipeline</h3></summary>
 
 > ⚠️ **Note:** Only use this option if you did NOT run Step 2.3 or need to debug individual steps.
 
