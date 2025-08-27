@@ -449,7 +449,7 @@ class AF3ResultsProcessor:
         self.print_clean(f"   📁 Saved to: {chain_location}")
         self.print_clean("")
         
-    def split_individual_domains(self, AF3_results_path):
+    def split_individual_domains(self, AF3_results_path, device):
         """
         Split PDB files to individual domains using Merizo.
         
@@ -482,7 +482,7 @@ class AF3ResultsProcessor:
                     continue
                 
                 chain = chain_names[0]
-                merizo_command = f"python modules/merizo/predict.py -i {chain_file} --pdb_chain {chain} --save_pdb --save_domains -o {domain_location}"
+                merizo_command = f"python modules/merizo/predict.py --device {device} -i {chain_file} --pdb_chain {chain} --save_pdb --save_domains -o {domain_location}"
                 
                 merizo_result = self.run_merizo_command(merizo_command)
                 
@@ -509,6 +509,7 @@ def main():
     parser = argparse.ArgumentParser(description='Convert AlphaFold3 CIF files to PDB format with chain and domain splitting')
     parser.add_argument('-f', '--fasta_file_path', required=True, help='Path to FASTA file')
     parser.add_argument('-a', '--AF3_results_path', required=True, help='Path to directory containing AlphaFold3 Results (Example: input/protein/AF3_results)')
+    parser.add_argument('-d', '--device', default='cuda', help='Device: cpu, cuda, cuda:1, etc')
     
     args = parser.parse_args()
     
@@ -541,7 +542,7 @@ def main():
         converter.split_individual_chains(AF3_results_path=args.AF3_results_path)
         
         # Step 3: Split individual domains
-        converter.split_individual_domains(AF3_results_path=args.AF3_results_path)
+        converter.split_individual_domains(AF3_results_path=args.AF3_results_path, device=args.device)
         
         # Final summary
         converter.print_clean("=" * 80)

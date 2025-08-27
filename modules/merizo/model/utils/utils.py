@@ -30,18 +30,11 @@ def get_device(device: str) -> torch.device:
         torch.device: returns selected torch.device object.
     """
 
-    if torch.cuda.is_available() and device == "cuda":
-        device = torch.device("cuda")  # GPU
-
-    elif device == "cpu" or (not torch.cuda.is_available() and device == "cuda"):
-        device = torch.device("cpu")  # CPU
-
-    elif device == "mps":
-        device = torch.device("mps")  # Apple Sllicon
+    if torch.cuda.is_available():
+        device = torch.device(device)  # GPU
 
     else:
-        print("Device (-d) needs to be either 'cpu', 'cuda' or 'mps'.")
-        exit()
+        device = torch.device("cpu")  # CPU
 
     return device
 

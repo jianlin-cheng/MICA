@@ -284,7 +284,7 @@ log_message "Step 1: Running process_AF3_results.py"
 start_time=$(date +%s)
 start_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
-STEP1_CMD="python utils/process_AF3_results.py -f \"$fasta_path\" -a \"$AF3_results_path\""
+STEP1_CMD="python utils/process_AF3_results.py -f \"$fasta_path\" -a \"$AF3_results_path\" -d \"$DEVICE\""
 log_message "Executing: $STEP1_CMD"
 
 if python utils/process_AF3_results.py -f "$fasta_path" -a "$AF3_results_path"; then
