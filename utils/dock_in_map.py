@@ -285,46 +285,112 @@ class PhenixDockingProcessor:
             self.logger.error(error_msg)
             raise
 
-    def subsequent_map_processing(self, input_map_path, pdb_file_path, output_map_path, 
-                                radius=2.0, percentage=40, centroid_method='median'):
+    def subsequent_map_processing(self, input_map_path, pdb_file_path, output_map_path,
+                              radius=2.0, percentage=40, centroid_method='median'):
         """
-        Process density map by masking within radius of docked structure.
+        Process density map by masking within radius of docked structure domains.
+        For single chain structures, identifies domains based on discontinuous residue numbers.
+        Each continuous segment of residues is treated as a separate domain.
         
-        This function masks out density around a docked structure to prevent
-        subsequent dockings from overlapping with already placed models.
+        Example: Residues 1,2,3,5,6,7,10,11 would create 3 domains:
+                Domain 1: 1-3, Domain 2: 5-7, Domain 3: 10-11
         
         Args:
             input_map_path: Path to input density map
-            pdb_file_path: Path to docked PDB structure
+            pdb_file_path: Path to docked PDB structure  
             output_map_path: Path for output masked map
             radius: Masking radius in Angstroms (default: 2.0)
-            percentage: Percentage of atoms closest to centroid to use for masking (default: 40)
+            percentage: Percentage of atoms closest to each domain centroid to use for masking (default: 40)
             centroid_method: Method to calculate centroid ('mean' or 'median', default: 'median')
-            
+        
         Returns:
             str: Path to processed map file
         """
-        model_name = os.path.basename(pdb_file_path)
         
+        model_name = os.path.basename(pdb_file_path)
         try:
-            # Read atomic coordinates
+            # Read structure and collect residues with their atoms
             parser = PDB.PDBParser(QUIET=True)
             structure = parser.get_structure('protein', pdb_file_path)
-            coords = np.array([atom.get_coord() for atom in structure.get_atoms()])
             
-            # Calculate centroid
-            if centroid_method == 'mean':
-                centroid = np.mean(coords, axis=0)
-            elif centroid_method == 'median':
-                centroid = np.median(coords, axis=0)
-            else:
-                raise ValueError(f"Unknown centroid method: {centroid_method}")
+            # Collect all residues and their atoms (assuming single chain)
+            residues_data = {}
+            for residue in structure.get_residues():
+                if residue.get_id()[0] == ' ':  # Only consider regular residues
+                    res_num = residue.get_id()[1]
+                    atoms = list(residue.get_atoms())
+                    if atoms:  # Only include residues with atoms
+                        residues_data[res_num] = atoms
             
-            # Select atoms closest to centroid
-            distances_to_centroid = np.sqrt(np.sum((coords - centroid)**2, axis=1))
-            num_coords_to_use = int(len(coords) * (percentage / 100.0))
-            closest_indices = np.argsort(distances_to_centroid)[:num_coords_to_use]
-            selected_coords = coords[closest_indices]
+            if not residues_data:
+                raise ValueError("No valid residues found in structure")
+            
+            # Sort residue numbers
+            sorted_res_nums = sorted(residues_data.keys())
+            
+            # Identify domains based on discontinuities in residue numbers
+            domains = []
+            current_domain_residues = [sorted_res_nums[0]]
+            
+            for i in range(1, len(sorted_res_nums)):
+                current_res = sorted_res_nums[i]
+                prev_res = sorted_res_nums[i-1]
+                gap = current_res - prev_res
+                if gap > 1:  # Any gap larger than 1 indicates discontinuity
+                    # Save current domain
+                    domains.append(current_domain_residues)
+                    # Start new domain
+                    current_domain_residues = [current_res]
+                    self.logger.info(f"Domain break detected: gap of {gap} between residues {prev_res} and {current_res}")
+                else:
+                    # Continue current domain (consecutive residues)
+                    current_domain_residues.append(current_res)
+            
+            # Add the last domain
+            if current_domain_residues:
+                domains.append(current_domain_residues)
+            
+            self.logger.info(f"Identified {len(domains)} domains in {model_name}")
+            
+            all_domain_coords = []
+            
+            # Process each domain
+            for domain_idx, domain_res_nums in enumerate(domains):
+                # Collect all atoms for this domain
+                domain_atoms = []
+                for res_num in domain_res_nums:
+                    domain_atoms.extend(residues_data[res_num])
+                
+                # Get coordinates for all atoms in this domain
+                domain_coords = np.array([atom.get_coord() for atom in domain_atoms])
+                
+                # Calculate domain centroid
+                if centroid_method == 'mean':
+                    domain_centroid = np.mean(domain_coords, axis=0)
+                elif centroid_method == 'median':
+                    domain_centroid = np.median(domain_coords, axis=0)
+                else:
+                    raise ValueError(f"Unknown centroid method: {centroid_method}")
+                
+                # Select atoms closest to domain centroid
+                distances_to_centroid = np.sqrt(np.sum((domain_coords - domain_centroid)**2, axis=1))
+                num_coords_to_use = max(1, int(len(domain_coords) * (percentage / 100.0)))
+                closest_indices = np.argsort(distances_to_centroid)[:num_coords_to_use]
+                selected_coords = domain_coords[closest_indices]
+                
+                all_domain_coords.append(selected_coords)
+                
+                res_range = f"{min(domain_res_nums)}-{max(domain_res_nums)}"
+                self.logger.info(f"Domain {domain_idx + 1} (residues {res_range}): "
+                            f"{len(domain_atoms)} atoms, "
+                            f"{len(selected_coords)} selected for masking, "
+                            f"centroid at [{domain_centroid[0]:.2f}, {domain_centroid[1]:.2f}, {domain_centroid[2]:.2f}]")
+            
+            # Combine all selected coordinates from all domains
+            if not all_domain_coords:
+                raise ValueError("No domains found in the structure")
+            
+            all_selected_coords = np.vstack(all_domain_coords)
             
             # Process map
             with mrcfile.open(input_map_path, mode='r') as mrc:
@@ -333,34 +399,42 @@ class PhenixDockingProcessor:
                 origin = np.array([mrc.header.origin.x, mrc.header.origin.y, mrc.header.origin.z])
                 
                 # Convert coordinates to voxel space
-                selected_voxel_coords = ((selected_coords - origin) / voxel_size).astype(int)
+                selected_voxel_coords = ((all_selected_coords - origin) / voxel_size).astype(int)
                 
                 # Create binary mask
                 mask = np.zeros_like(map_data, dtype=bool)
                 valid_coords = (
-                    (selected_voxel_coords >= 0) & 
+                    (selected_voxel_coords >= 0) &
                     (selected_voxel_coords < np.array(map_data.shape))
                 ).all(axis=1)
                 
                 selected_voxel_coords = selected_voxel_coords[valid_coords]
-                mask[selected_voxel_coords[:, 2], selected_voxel_coords[:, 1], selected_voxel_coords[:, 0]] = True
                 
-                # Apply distance transform for radius-based masking
-                distances = distance_transform_edt(~mask, sampling=voxel_size)
-                mask = distances <= radius
-                
-                # Apply mask to map data
-                masked_data = map_data.copy()
-                masked_data[mask] = 0
+                if len(selected_voxel_coords) > 0:
+                    mask[selected_voxel_coords[:, 2], 
+                        selected_voxel_coords[:, 1], 
+                        selected_voxel_coords[:, 0]] = True
+                    
+                    # Apply distance transform for radius-based masking
+                    distances = distance_transform_edt(~mask, sampling=voxel_size)
+                    mask = distances <= radius
+                    
+                    # Apply mask to map data
+                    masked_data = map_data.copy()
+                    masked_data[mask] = 0
+                else:
+                    self.logger.warning(f"No valid coordinates found for masking in {model_name}")
+                    masked_data = map_data.copy()
                 
                 # Save result
                 with mrcfile.new(output_map_path, overwrite=True) as mrc_out:
                     mrc_out.set_data(masked_data.astype(np.float32))
                     mrc_out.voxel_size = mrc.voxel_size
                     mrc_out.header.origin = mrc.header.origin
-                
-                return output_map_path
-                
+            
+            self.logger.info(f"Successfully processed {len(all_domain_coords)} domains from {model_name}")
+            return output_map_path
+            
         except Exception as e:
             error_msg = f"Error in map masking for {model_name}: {str(e)}"
             self.logger.error(error_msg)
