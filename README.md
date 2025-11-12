@@ -423,16 +423,18 @@ The datasets provided with MICA are derived from publicly available sources:
 If you use MICA in your research, please cite our paper:
 
 ```bibtex
-@article{Gyawali2025.07.03.663071,
-	author = {Gyawali, Rajan and Dhakal, Ashwin and Cheng, Jianlin},
-	title = {Multimodal deep learning integration of cryo-EM and AlphaFold3 for high-accuracy protein structure determination},
-	elocation-id = {2025.07.03.663071},
-	year = {2025},
-	doi = {10.1101/2025.07.03.663071},
-	publisher = {Cold Spring Harbor Laboratory},
-	issn = {2692-8205},
-	URL = {https://www.biorxiv.org/content/early/2025/07/03/2025.07.03.663071},
-	journal = {bioRxiv}
+@article{Gyawali2025,
+  title={Multimodal deep learning integration of cryo-EM and AlphaFold3 for high-accuracy protein structure determination},
+  author={Gyawali, Rajan and Dhakal, Ashwin and Cheng, Jianlin},
+  journal={Communications Chemistry},
+  volume={8},
+  number={1},
+  pages={320},
+  year={2025},
+  month={oct},
+  issn={2399-3669},
+  doi={10.1038/s42004-025-01718-5},
+  url={https://doi.org/10.1038/s42004-025-01718-5}
 }
 
 ```
