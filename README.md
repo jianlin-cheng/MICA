@@ -150,18 +150,18 @@ The script executes three programs in the following order:
 
 **Required Format:**
 ```bash
-./protein_pipeline.sh [OPTIONS]
+./MICA_pipeline.sh [OPTIONS]
 ```
 
 **Interactive Mode:**
 ```bash
-./protein_pipeline.sh
+./MICA_pipeline.sh
 ```
 *Prompts for all required inputs*
 
 **Example:**
 ```bash
-./protein_pipeline.sh \
+./MICA_pipeline.sh \
     -f input/15635/8at6.fasta \
     -a input/15635/AF3_results \
     -m input/15635/emd_15635.map \
