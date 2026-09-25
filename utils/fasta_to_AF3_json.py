@@ -273,7 +273,7 @@ class FastaToJsonConverter:
             self.failed_entries.append(base_name)
             return []
 
-    def process_fasta_file(self, fasta_file, input_dir="../input", base_name="protein"):
+    def process_fasta_file(self, fasta_file, input_dir="input", base_name="protein"):
         """
         Process a FASTA file and generate JSON files.
         
