@@ -41,7 +41,7 @@ rm input.tar.gz
 ### 5. Inference on Sample Data 
 Run inference on sample data to make sure the installation has been done correctly.
 ```
-python run.py -m input/15635/emd_15635.map -f input/15635/8at6.fasta -i input/15635 --run_pulchra --pulchra_path=modules/pulchra304/src/pulchra --resolution=3.7
+python run.py -m input/15635/emd_15635.map -f input/15635/8at6.fasta -a input/15635/AF3_structures --run_pulchra --pulchra_path=modules/pulchra304/src/pulchra --resolution=3.7
 ```
 
 </details>
