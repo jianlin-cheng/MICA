@@ -93,21 +93,66 @@ MICA/
 Run the following commands sequentially inside *MICA location*.
 
 ### 2.1 Generate AlphaFold3 JSON files
-**Required Format:**
-```bash
-python utils/fasta_to_AF3_json.py -f <path/to/fasta/file> -n <protein_name or Map ID>
+
+> [!IMPORTANT]
+> **FASTA header and name format are strict.** If they are not followed, the script may silently process **only the first chain**.
+
+#### Rules
+
+1. Give each **unique chain (entity)** its own header, numbered in order: `>8AT6_1|`, `>8AT6_2|`, `>8AT6_3|`, …
+2. Each header must start with `>`, then `<PDBID>_<number>`, followed directly by `|`.
+3. Use **exactly one underscore** in each header: the one between the PDB ID and the chain number.
+4. The protein name or Map ID passed with `-n` must contain **no underscores**.
+
+|                | ✅ Correct                            | ❌ Incorrect                                                     |
+|----------------|---------------------------------------|-----------------------------------------------------------------|
+| FASTA header   | `>8AT6_1\|Chains A, B\|...`           | `>8AT6__1\|`, `>8AT6_chain_1\|`, `>8_AT6_1\|`, `>8AT6-1\|`, `>8AT6_1 Chains A` |
+| `-n` argument  | `15635`, `EMD-15635`, `MyProtein`     | `EMD_15635`, `my_protein`, `8AT6_map`                           |
+
+#### Example FASTA (`input/15635/8at6.fasta`)
+
+```
+>8AT6_1|Chains A, B|Example subunit alpha|Homo sapiens (9606)
+MSTAKLVEEALRKGYDVVLVGAGPAGLSAAIYLARAGLKVLVLEKNSEVGGTWRNPEGY
+>8AT6_2|Chain C|Example subunit beta|Homo sapiens (9606)
+MADQLTEEQIAEFKEAFSLFDKDGDGTITTKELGTVMRSLGQNPTEAELQDMINEVDAD
+>8AT6_3|Chain D|Example subunit gamma|Homo sapiens (9606)
+MKVLAAGIVGLLLAAGCSSHKEETPAVQQPAPAEQTATPEAAPAAEEKPAETQA
 ```
 
-**Example:**
+> The sequences above are placeholders. Use the real sequences for your entry.
+> FASTA files downloaded from RCSB (e.g. `https://www.rcsb.org/fasta/entry/8AT6`) already use this header format. Do not rename the headers, but check that no extra underscores appear anywhere in them.
+
+#### Run
+
+Required format:
+
+```bash
+python utils/fasta_to_AF3_json.py -f <path/to/fasta/file> -n <protein name or Map ID (no underscores)>
+```
+
+Example:
+
 ```bash
 python utils/fasta_to_AF3_json.py -f input/15635/8at6.fasta -n 15635
 ```
 
-- Upload generated JSON files to [AlphaFold3 server](https://alphafoldserver.com)
-- Download results and place in:
-  - `input/15635/AF3_results/8at6_1/*model_0.cif`
-  - `input/15635/AF3_results/8at6_2/*model_0.cif`
-  - `input/15635/AF3_results/8at6_3/*model_0.cif`
+#### Upload and place results
+
+* Upload the generated JSON files to the [AlphaFold3 server](https://alphafoldserver.com).
+* Download the results and place each chain's `*model_0.cif` in the folder that matches its FASTA header:
+
+```
+input/15635/
+├── 8at6.fasta
+└── AF3_results/
+    ├── 8at6_1/          ← from header >8AT6_1|
+    │   └── *model_0.cif
+    ├── 8at6_2/          ← from header >8AT6_2|
+    │   └── *model_0.cif
+    └── 8at6_3/          ← from header >8AT6_3|
+        └── *model_0.cif
+```
 
 ### 2.2 Get map parameters if Cryo-EM map is available in EMDB website (Optional)
 
